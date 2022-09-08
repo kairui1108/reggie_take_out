@@ -20,4 +20,4 @@ mybatis-plus:
 
 reggie:
 #  path: E:\java\reggie_take_out\src\main\resources\upload\
-  path: ./images/
+  path: /root/app/upload/
