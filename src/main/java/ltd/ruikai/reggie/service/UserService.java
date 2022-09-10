@@ -9,4 +9,6 @@ import ltd.ruikai.reggie.entity.User;
  * @ version 1.0
  */
 public interface UserService extends IService<User> {
+
+    User getUserById(Long id);
 }
