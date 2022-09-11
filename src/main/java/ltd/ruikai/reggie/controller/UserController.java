@@ -9,10 +9,7 @@ import ltd.ruikai.reggie.utils.ValidateCodeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -89,6 +86,12 @@ public class UserController {
         }
 
         return R.error("登录失败");
+    }
+
+    @PostMapping("/loginout")
+    public R<String> logout(HttpSession session){
+        session.removeAttribute("user");
+        return R.success("退出登录");
     }
 
 }
