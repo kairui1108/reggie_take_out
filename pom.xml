@@ -119,7 +119,7 @@
         <repository>
             <id>internal.repo</id>
             <name>Internal repo</name>
-            <url>file:///home/mvn/in</url>
+            <url>file:///home/thara/testesb/in</url>
         </repository>
     </distributionManagement>
 
