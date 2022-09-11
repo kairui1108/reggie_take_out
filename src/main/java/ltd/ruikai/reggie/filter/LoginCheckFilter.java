@@ -25,6 +25,14 @@ public class LoginCheckFilter implements Filter {
 
     public static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
+    /**
+     * todo： 分离前后端的过滤规则
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import ltd.ruikai.reggie.common.R;
 import ltd.ruikai.reggie.dto.SetmealDto;
 import ltd.ruikai.reggie.entity.Category;
+import ltd.ruikai.reggie.entity.Dish;
 import ltd.ruikai.reggie.entity.Setmeal;
 import ltd.ruikai.reggie.service.CategoryService;
 import ltd.ruikai.reggie.service.SetmealDishService;
@@ -110,6 +111,11 @@ public class SetmealController {
         return R.success(list);
     }
 
-    //todo:更具id查询套餐信息，修改套餐信息
+    //todo:根据id查询套餐信息，修改套餐信息
+    @GetMapping("/{id}")
+    public R<Setmeal> getById(@PathVariable Long id){
+
+        return R.success(setmealService.getById(id));
+    }
 
 }
