@@ -14,6 +14,8 @@ import ltd.ruikai.reggie.service.DishFlavorService;
 import ltd.ruikai.reggie.service.DishService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,7 @@ public class DishController {
     private RedisTemplate redisTemplate;
 
     @PostMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> save(@RequestBody DishDto dishDto){
         dishService.saveWithFlavor(dishDto);
         String key = "dish_" + dishDto.getCategoryId() + "_1";
@@ -86,21 +89,14 @@ public class DishController {
     }
 
     @PutMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> update(@RequestBody DishDto dishDto){
         dishService.updateWithFlavor(dishDto);
-
-        //清理所有缓存
-        //Set keys = redisTemplate.keys("dish_");
-        //redisTemplate.delete(keys);
-
-        //精确删除缓存
-        String key = "dish_" + dishDto.getCategoryId() + "_1";
-        redisTemplate.delete(key);
-
         return R.success("更新信息成功");
     }
 
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> status(@PathVariable Integer status, String ids){
         log.info("status: {}; ids: {}", status, ids);
         String[] idList = ids.split(",");
@@ -114,6 +110,7 @@ public class DishController {
     }
 
     @DeleteMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> delete(String ids){ //todo: 未判断是否在其他地方有引用，如套餐
         log.info("delete ids: {}", ids);
         String[] idList = ids.split(",");
@@ -127,17 +124,10 @@ public class DishController {
     }
 
     @GetMapping("/list")
+    @Cacheable(value = "dishCache", key = "#dish.categoryId + '_' + #dish.status", unless = "#result == null")
     public R<List<DishDto>> list(Dish dish){
 
         List<DishDto> res = null;
-
-        String key = "dish_" + dish.getCategoryId() + "_" + dish.getStatus();
-        //先从redis查询
-        res = (List<DishDto>) redisTemplate.opsForValue().get(key);
-
-        if(res != null){
-            return R.success(res);
-        }
 
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
@@ -163,7 +153,7 @@ public class DishController {
             return dishDto;
         }).collect(Collectors.toList());
 
-        redisTemplate.opsForValue().set(key, res, 30,TimeUnit.MINUTES);
+
         return R.success(res);
     }
 

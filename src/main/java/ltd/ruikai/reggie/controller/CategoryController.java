@@ -7,6 +7,8 @@ import ltd.ruikai.reggie.common.R;
 import ltd.ruikai.reggie.entity.Category;
 import ltd.ruikai.reggie.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
+    @CacheEvict(value = "categoryCache", allEntries = true)
     public R<String> save(@RequestBody Category category){
         log.info("category: {}", category);
         categoryService.save(category);
@@ -48,6 +51,7 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "categoryCache", allEntries = true)
     public R<String> deleteCategory(Long ids){
 
         categoryService.remove(ids);
@@ -55,12 +59,14 @@ public class CategoryController {
     }
 
     @PutMapping
+    @CacheEvict(value = "categoryCache", allEntries = true)
     public R<String> update(@RequestBody Category category){
         categoryService.updateById(category);
         return R.success("修改成功");
     }
 
     @GetMapping("/list")
+    @Cacheable(value = "categoryCache", key = "'category_type_' + #category.type")
     public R<List<Category>> list(Category category){
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(category.getType() != null, Category::getType, category.getType());

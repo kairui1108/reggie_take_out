@@ -88,6 +88,7 @@ public class SetmealController {
     }
 
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> status(@PathVariable Integer status,@RequestParam List<Long> ids){
         for (Long id : ids) {
             UpdateWrapper<Setmeal> updateWrapper = new UpdateWrapper<>();
