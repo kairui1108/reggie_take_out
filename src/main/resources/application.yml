@@ -10,7 +10,7 @@ spring:
 #      username: root
 #      password: password
   redis:
-    host: 192.168.1.57
+    host: 192.168.1.172
     port: 6379
     password: TANRUIKAI
     database: 0
