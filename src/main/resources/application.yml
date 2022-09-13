@@ -25,7 +25,7 @@ spring:
       master:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.57:3306/reggie?characterEncoding=utf-8
+        url: jdbc:mysql://192.168.1.172:3306/reggie?characterEncoding=utf-8
         username: admin
         password: TANRUIKAI
       slave:
