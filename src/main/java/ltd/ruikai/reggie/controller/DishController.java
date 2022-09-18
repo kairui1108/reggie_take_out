@@ -19,6 +19,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -111,13 +112,13 @@ public class DishController {
     @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> delete(String ids){ //todo: 未判断是否在其他地方有引用，如套餐
         log.info("delete ids: {}", ids);
-        String[] idList = ids.split(",");
-        for (String id : idList) {
+        List<String> idList = Arrays.asList(ids.split(","));
+
+        idList.forEach((id) -> {
             LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Dish::getId, id);
-            //todo: 获取相应id的菜品对应的图片名称，然后删除图片（mbp 相关操作不熟悉）
             dishService.remove(queryWrapper);
-        }
+        });
         return R.success("删除成功");
     }
 

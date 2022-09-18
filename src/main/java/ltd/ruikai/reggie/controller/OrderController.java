@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ author  tanruikai
@@ -65,12 +66,13 @@ public class OrderController {
         }
         Page<Orders> pageRes = orderService.page(pageInfo, queryWrapper);
         List<Orders> orders = pageRes.getRecords();
-        for (Orders order : orders) {
+        orders = orders.stream().map((order) -> {
             Long userId = order.getUserId();
-            User user = userService.getUserById(userId);
-            order.setUserName(user.getName());
-        }
-        //todo: 用stream优化
+            User userById = userService.getUserById(userId);
+            order.setUserName(userById.getName());
+            return order;
+        }).collect(Collectors.toList());
+
         return R.success(pageRes);
     }
 

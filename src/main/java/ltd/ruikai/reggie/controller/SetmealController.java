@@ -112,7 +112,7 @@ public class SetmealController {
         return R.success(list);
     }
 
-    //todo:根据id查询套餐信息，修改套餐信息
+
     @GetMapping("/{id}")
     public R<Setmeal> getById(@PathVariable Long id){
 
