@@ -1,5 +1,5 @@
 reggie:
-  path: /root/app/upload/
+  path: classpath:/upload/
 
 server:
   port: 8080
