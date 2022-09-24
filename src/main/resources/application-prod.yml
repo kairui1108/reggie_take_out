@@ -1,5 +1,5 @@
 reggie:
-  path: classpath:/upload/z
+  path: classpath:/upload/
 
 server:
   port: 8080
