@@ -1,0 +1,5 @@
+reggie:
+  path: /root/app/upload/
+
+server:
+  port: 8080
